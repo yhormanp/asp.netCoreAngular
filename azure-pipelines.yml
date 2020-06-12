@@ -109,26 +109,36 @@ stages:
     - publish: '$(Build.ArtifactStagingDirectory)'
       artifact: drop
 
-# - stage: 'Deploy'
-#   displayName: 'Deploy the web application'
-#   dependsOn: Build
-#   jobs:
-#   - deployment: Deploy
-#     pool:
-#       vmImage: 'ubuntu-16.04'
-#     environment: dev
-#     variables:
-#     - group: Release
-#     strategy:
-#       runOnce:
-#         deploy:
-#           steps:
-#           - download: current
-#             artifact: drop
-#           - task: AzureWebApp@1
-#             displayName: 'Azure App Service Deploy: website'
-#             inputs:
-#               azureSubscription: 'Resource Manager - Tailspin - Space Game'
-#               appName: '$(WebAppName)'
-#               package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+- stage: 'Deploy'
+  displayName: 'Deploy the web application'
+  dependsOn: Build
+  jobs:
+  - deployment: Deploy
+    pool:
+      # vmImage: 'ubuntu-16.04'
+    environment: dev
+    # variables:
+    # - group: Release
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+          - download: current
+            artifact: drop
+
+          - task: AzureWebApp@1
+            displayName: 'Azure App Service Deploy: website'
+            inputs:
+              azureSubscription: 'Azure subscription 1(bc04f5a2-8205-4c4a-957b-4200d1846260)'
+              appType: 'webApp'
+              appName: 'aspnetbasicexample'
+              package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
+              deploymentMethod: 'auto'
+          # - task: AzureWebApp@1
+          #   displayName: 'Azure App Service Deploy: website'
+          #   inputs:
+          #     appType: 'webApp'
+          #     azureSubscription: 'Resource Manager - Tailspin - Space Game'
+          #     appName: '$(WebAppName)'
+          #     package: '$(Pipeline.Workspace)/drop/$(buildConfiguration)/*.zip'
               
