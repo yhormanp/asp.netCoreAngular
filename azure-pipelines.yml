@@ -43,7 +43,7 @@ stages:
         verbose: false
 
     - script: './node_modules/.bin/node-sass $(wwwrootDir) --output $(wwwrootDir)'
-      condition: eq(${{ parameters.run_Saas }}, 'true)
+      condition: eq(${{ parameters.run_Saas }}, 'true')
       displayName: 'Compile Sass assets'
 
     - task: gulp@1
